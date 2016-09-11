@@ -1,0 +1,101 @@
+{
+  "name": "express-api-template",
+  "version": "0.0.0-development",
+  "repository": "https://github.com/tobitenno/express-api-template-Oauth2.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server",
+    "lint": "eslint src",
+    "lint:fix": "eslint src/ --fix",
+    "test": "nyc --reporter=lcov mocha src/spec/**/*.spec.js --exit",
+    "dev": "nodemon"
+  },
+  "engines": {
+    "node": ">= 14.14.0"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "cors": "^2.7.1",
+    "debug": "^4.3.2",
+    "dotenv": "^2.0.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^5.12.3",
+    "mongoose-unique-validator": "^2.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.1.0",
+    "prom-client": "^10.2.3",
+    "serve-favicon": "^2.5.0",
+    "swagger-stats": "^0.99.1",
+    "winston": "^3.3.3",
+    "yaml": "^1.10.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "prettier",
+      "airbnb-base"
+    ],
+    "parserOptions": {
+      "sourceType": "script"
+    },
+    "rules": {
+      "valid-jsdoc": [
+        "error",
+        {
+          "requireReturn": false,
+          "requireReturnDescription": false,
+          "preferType": {
+            "String": "string",
+            "Number": "number",
+            "Boolean": "boolean",
+            "Function": "function",
+            "object": "Object",
+            "date": "Date",
+            "error": "Error"
+          },
+          "prefer": {
+            "return": "returns"
+          }
+        }
+      ],
+      "no-underscore-dangle": "off",
+      "strict": [
+        "error",
+        "safe"
+      ],
+      "linebreak-style": "off",
+      "no-restricted-syntax": "off",
+      "no-await-in-loop": "off",
+      "global-require": "off",
+      "no-fallthrough": "off",
+      "no-param-reassign": "off",
+      "no-case-declarations": "off",
+      "no-nested-ternary": "off",
+      "no-unused-expressions": "off"
+    },
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "nodemonConfig": {
+    "env": {
+      "LOG_LEVEL": "info",
+      "SECRET_KEY": "don'treallyusethisasarealsecret",
+      "ENABLE_SWAGGER": true
+    }
+  }
+}
