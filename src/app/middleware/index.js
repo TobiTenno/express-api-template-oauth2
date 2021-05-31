@@ -21,7 +21,7 @@ const swaggerOptions = {
 module.exports = (app) => {
   app.use(cors(corsOptions));
   app.use(favicon(path.join(__dirname, '../../', 'public', 'favicon.ico')));
-  app.use(logger('dev'));
+  if (process.env.USE_RECORDS) app.use(logger('dev'));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   if (process.env.ENABLE_SWAGGER) app.use(swagger.getMiddleware(swaggerOptions));

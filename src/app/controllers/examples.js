@@ -7,70 +7,53 @@ const Example = require('../models').example;
 
 const authenticate = require('./concerns/authenticate');
 
-// index
-router.get('/', ah(async (req, res, next) => {
-  try {
-    const examples = await Example.find();
-    res.json(examples);
-  } catch (e) {
-    next(e);
-  }
+// read all
+router.get('/', ah(async (req, res) => {
+  res.json(await Example.find());
 }));
 
-// show
-router.get('/:id', ah(async (req, res) => {
-  try {
-    const example = await Example.findById(req.params.id);
-    if (!example) {
-      return res.status(404).json({ error: 'No example found' });
-    }
-    return res.json(example);
-  } catch (e) {
-    return res.status(500).json({ error: `Failed to find ${req.params.id}` });
-  }
-}));
-
+// create
 router.post('/', authenticate, ah(async (req, res) => {
-  const baseExample = Object.assign(req.body.example, {
+  const baseExample = {
+    ...req.body,
     _owner: req.currentUser._id,
-  });
-  try {
-    const example = await Example.create(baseExample);
-    res.json({ example });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+  };
+  const example = await Example.create(baseExample);
+  res.json(example);
 }));
 
+// read
+router.get('/:id', ah(async (req, res) => {
+  const example = await Example.findById(req.params.id);
+  if (!example) {
+    return res.status(404).json({ error: 'No example found' });
+  }
+  return res.json(example);
+}));
+
+// update
 router.patch('/:id', authenticate, ah(async (req, res) => {
   const search = { _id: req.params.id, _owner: req.currentUser._id };
-  try {
-    const example = await Example.findOne(search);
-    if (!example) {
-      return res.status(404).json({ error: 'No example found' });
-    }
-
-    delete req.body._owner; // disallow owner reassignment.
-    await example.update(req.body.example);
-    return res.sendStatus(200);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
+  const example = await Example.findOne(search);
+  if (!example) {
+    return res.status(404).json({ error: 'No example found' });
   }
+
+  delete req.body._owner; // disallow owner reassignment.
+  await example.updateOne(req.body);
+  return res.status(200).end();
 }));
 
+// delete
 router.delete('/:id', authenticate, ah(async (req, res) => {
   const search = { _id: req.params.id, _owner: req.currentUser._id };
-  try {
-    const example = await Example.findOne(search);
-    if (!example) {
-      return res.status(404).json({ error: 'No example found' });
-    }
-
-    await example.remove();
-    return res.sendStatus(200);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
+  const example = await Example.findOne(search);
+  if (!example) {
+    return res.status(404).json({ error: 'No example found' });
   }
+
+  await Example.deleteOne(search);
+  return res.status(200).end();
 }));
 
 module.exports = router;

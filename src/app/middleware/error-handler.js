@@ -1,21 +1,11 @@
 'use strict';
 
-const debug = require('debug')('express-template:error-handler');
+const logger = require('../../lib/logger')('API');
 
-const errorHandler = (err, req, res) => {
-  const errorResponse = {
-    error: {
-      message: err.message,
-    },
-  };
-
-  // include stacktrace
-  if (req.app.get('env') === 'development') {
-    errorResponse.error.error = err;
-    debug(errorResponse);
-  }
-
-  res.status(err.status || 500).json(errorResponse);
+const errorHandler = (err, req, res, next) => {
+  if (!err) return next();
+  logger.debug(err);
+  return res.status(err.status || 500).json({ error: err.message });
 };
 
 module.exports = errorHandler;

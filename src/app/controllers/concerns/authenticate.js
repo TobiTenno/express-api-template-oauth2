@@ -16,7 +16,7 @@ const decodeToken = (signedSecureToken) => {
 
 const accessDenied = (res) => {
   res.set('WWW-Authenticate', 'Token realm="Application"');
-  res.status(401).send('HTTP Token: Access denied.\n');
+  res.status(401).send('HTTP Token: Access denied.');
 };
 
 const authenticate = async (req, res, next) => {

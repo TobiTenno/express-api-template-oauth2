@@ -1,41 +1,10 @@
 'use strict';
 
-require('dotenv').load({
-  silent: process.env.NODE_ENV === 'production', // don't log missing .env
-});
-
-const express = require('express');
-
-const app = express();
 const debug = require('debug')('express-template:server');
 const http = require('http');
-const middleware = require('./app/middleware');
+
+const app = require('./app');
 const logger = require('./lib/logger')();
-require('./app/middleware/mongoose');
-
-middleware(app);
-
-app.use(require('./app/controllers'));
-
-app.use(express.static('./public'));
-
-app.use(require('./app/middleware/404'));
-
-/**
- * Normalize a port into a number, string, or false.
- * @param {string|number} val potentially non-normalized port number
- * @returns {number} normalized port number
- */
-const normalizePort = (val) => {
-  const port = parseInt(val, 10);
-  return port >= 0 ? port : (Number.isNaN(port) ? val : false);
-};
-
-/*
- * Get port from environment and store in Express.
- */
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
 
 /*
  * Create HTTP server.
@@ -52,8 +21,8 @@ const onError = (error) => {
   }
 
   const bind = typeof port === 'string'
-    ? `Pipe ${port}`
-    : `Port ${port}`;
+    ? `Pipe ${app.get('port')}`
+    : `Port ${app.get('port')}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -85,4 +54,4 @@ const onListening = () => {
 server.on('error', onError);
 server.on('listening', onListening);
 
-server.listen(port);
+server.listen(app.get('port'));

@@ -1,9 +1,5 @@
 'use strict';
 
-const HttpError = require('../../lib/errors/HttpError');
-
-const notFound = (request, response, next) => {
-  next(new HttpError(404));
+module.exports = (request, response) => {
+  response.status(404).json({ error: 'No route found' });
 };
-
-module.exports = notFound;

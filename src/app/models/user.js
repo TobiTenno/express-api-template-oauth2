@@ -43,19 +43,17 @@ User.virtual('password').set(function (password) {
 });
 
 User.pre('save', function (next) {
-  if (!this._password) {
-    throw new Error('password lost');
+  if (this._password) {
+    const salt = bcrypt.genSaltSync(null);
+    if (!salt) {
+      throw new Error('no salt');
+    }
+    const digest = bcrypt.hashSync(this._password, salt);
+    if (!digest) {
+      throw new Error('no digest');
+    }
+    this.passwordDigest = digest;
   }
-
-  const salt = bcrypt.genSaltSync(null);
-  if (!salt) {
-    throw new Error('no salt');
-  }
-  const digest = bcrypt.hashSync(this._password, salt);
-  if (!digest) {
-    throw new Error('no digest');
-  }
-  this.passwordDigest = digest;
   next();
 });
 
