@@ -19,31 +19,31 @@ const credentials = { email: 'test@contso.org', password: 'password' };
 
 const technicallyValidId = new mongoose.Types.ObjectId();
 
-before(async () => mockDB.connect());
-beforeEach(async () => {
-  try {
-    await chai.request(server)
-      .post('/users/signup')
-      .send(credentials);
-    const res = await chai.request(server)
-      .post('/users/login')
-      .auth(credentials.email, credentials.password);
-    token = res.body.token;
-    user = res.body;
-  } catch (e) {
-    console.error(e);
-  }
-});
-afterEach(async () => {
-  await User.deleteMany({});
-});
-after(async () => {
-  user = undefined;
-  token = undefined;
-  return mockDB.close();
-});
-
 describe('/users', () => {
+  before(async () => mockDB.connect());
+  beforeEach(async () => {
+    try {
+      await chai.request(server)
+        .post('/users/signup')
+        .send(credentials);
+      const res = await chai.request(server)
+        .post('/users/login')
+        .auth(credentials.email, credentials.password);
+      token = res.body.token;
+      user = res.body;
+    } catch (e) {
+      console.error(e);
+    }
+  });
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+  after(async () => {
+    user = undefined;
+    token = undefined;
+    return mockDB.close();
+  });
+
   it('should return all current users', async () => {
     const res = await chai.request(server)
       .get('/users')
