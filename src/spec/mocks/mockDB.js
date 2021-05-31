@@ -2,6 +2,7 @@
 
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
+const decache = require('decache');
 
 const mongod = new MongoMemoryServer({
   version: '4.0.14',
@@ -22,6 +23,10 @@ module.exports.connect = async () => {
 };
 
 module.exports.close = () => {
-  if (mongoose.connection.readyState === 1) return mongoose.disconnect();
-  return null;
+  try {
+    return mongoose.disconnect();
+  } finally {
+    decache('mongoose');
+    decache('mongodb-memory-server');
+  }
 };

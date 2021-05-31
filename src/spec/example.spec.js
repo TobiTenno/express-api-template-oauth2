@@ -3,6 +3,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
+const decache = require('decache');
 
 const mockDB = require('./mocks/mockDB');
 const server = require('../app');
@@ -41,9 +42,14 @@ describe('/examples', () => {
     await Example.deleteMany({});
   });
   after(async () => {
-    token = undefined;
-    user = undefined;
-    return mockDB.close();
+    try {
+      user = undefined;
+      token = undefined;
+      return mockDB.close();
+    } finally {
+      decache('./mocks/mockDB');
+      decache('mongoose');
+    }
   });
   describe('GET', () => {
     it('should return nothing when no examples exist', async () => {

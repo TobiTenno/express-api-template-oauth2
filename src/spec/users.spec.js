@@ -3,6 +3,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
+const decache = require('decache');
 
 const mockDB = require('./mocks/mockDB');
 const server = require('../app');
@@ -39,9 +40,14 @@ describe('/users', () => {
     await User.deleteMany({});
   });
   after(async () => {
-    user = undefined;
-    token = undefined;
-    return mockDB.close();
+    try {
+      user = undefined;
+      token = undefined;
+      return mockDB.close();
+    } finally {
+      decache('./mocks/mockDB');
+      decache('mongoose');
+    }
   });
 
   it('should return all current users', async () => {
