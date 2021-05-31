@@ -7,7 +7,7 @@
     "start": "node src/server",
     "lint": "eslint src",
     "lint:fix": "eslint src/ --fix",
-    "test": "nyc --reporter=lcov --reporter=text mocha src/spec/**/*.spec.js --exit",
+    "test": "nyc --reporter=lcov --reporter=text mocha src/spec/**/*.spec.js --exit --timeout 60000",
     "dev": "nodemon"
   },
   "engines": {
@@ -18,13 +18,11 @@
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
     "cors": "^2.7.1",
-    "debug": "^4.3.2",
     "dotenv": "^2.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "mongoose": "^5.12.3",
     "mongoose-unique-validator": "^2.0.3",
-    "morgan": "^1.10.0",
     "multer": "^1.1.0",
     "prom-client": "^10.2.3",
     "serve-favicon": "^2.5.0",
@@ -35,6 +33,7 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
+    "decache": "^4.6.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
@@ -99,7 +98,9 @@
       "SECRET_KEY": "don'treallyusethisasarealsecret",
       "ENABLE_SWAGGER": true
     },
-    "ignore": ["src/spec/*.js"]
+    "ignore": [
+      "src/spec/*.js"
+    ]
   },
   "nyc": {
     "exclude": "src/spec/**"

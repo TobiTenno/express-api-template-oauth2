@@ -27,14 +27,10 @@ const authenticate = async (req, res, next) => {
     const opts = auth.replace(tokenRegex, '').split(separatorRegex);
     const signedToken = opts.shift();
     const token = decodeToken(signedToken);
-    try {
-      const user = await User.findOne({ token }).exec();
-      if (user) {
-        req.currentUser = user.toObject();
-        return next();
-      }
-    } catch (e) {
-      return next(e);
+    const user = await User.findOne({ token }).exec();
+    if (user) {
+      req.currentUser = user.toObject();
+      return next();
     }
   }
   return accessDenied(res);

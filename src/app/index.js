@@ -1,16 +1,12 @@
 'use strict';
 
-require('dotenv').load({
-  silent: process.env.NODE_ENV === 'production', // don't log missing .env
-});
+require('dotenv').load({ silent: true });
 
 const express = require('express');
 
 const app = express();
-const middleware = require('./middleware');
-require('./middleware/mongoose');
 
-middleware(app);
+require('./middleware')(app);
 
 app.use(require('./controllers'));
 

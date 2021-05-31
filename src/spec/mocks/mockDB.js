@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const mongod = new MongoMemoryServer();
 
 module.exports.connect = async () => {
-  if (mongoose.connection) mongoose.disconnect();
+  await mongoose.disconnect();
 
   const uri = await mongod.getUri();
 
@@ -20,5 +20,6 @@ module.exports.connect = async () => {
 };
 
 module.exports.close = () => {
-  if (mongoose.connection) mongoose.disconnect();
+  if (mongoose.connection.readyState === 1) return mongoose.disconnect();
+  return null;
 };

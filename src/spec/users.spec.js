@@ -2,33 +2,34 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const mockDB = require('./mocks/mockDB');
-const server = require('../app/');
+const mongoose = require('mongoose');
 
-const User = require('../app/models/user')
+const mockDB = require('./mocks/mockDB');
+const server = require('../app');
+
+const User = require('../app/models/user');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-let connection;
 let token;
 let user;
 
 const credentials = { email: 'test@contso.org', password: 'password' };
 
-before(async () => {
-  connection = await mockDB.connect();
-});
+const technicallyValidId = new mongoose.Types.ObjectId();
+
+before(async () => mockDB.connect());
 beforeEach(async () => {
   try {
     await chai.request(server)
       .post('/users/signup')
       .send(credentials);
-    const resp = await chai.request(server)
+    const res = await chai.request(server)
       .post('/users/login')
       .auth(credentials.email, credentials.password);
-    token = resp.body.token;
-    user = resp.body;
+    token = res.body.token;
+    user = res.body;
   } catch (e) {
     console.error(e);
   }
@@ -37,10 +38,9 @@ afterEach(async () => {
   await User.deleteMany({});
 });
 after(async () => {
-  mockDB.close();
-  connection = undefined;
-  token = undefined;
   user = undefined;
+  token = undefined;
+  return mockDB.close();
 });
 
 describe('/users', () => {
@@ -65,6 +65,14 @@ describe('/users', () => {
         res.body.email.should.not.be.undefined;
         res.body.email.should.eq(credentials.email);
       });
+      it('should fail if the user doesn\'t exist', async () => {
+        const res = await chai.request(server)
+          .get(`/users/${technicallyValidId}`)
+          .set('Authorization', `Token token=${token}`);
+        res.should.have.status(404);
+        res.body.should.be.an('object').and.have.property('error');
+        res.body.error.should.eq('No such user');
+      });
     });
     describe('PATCH', () => {
       it('should modify user email', async () => {
@@ -83,6 +91,7 @@ describe('/users', () => {
           .patch(`/users/${user._id}`)
           .set('Authorization', `Token token=${token}`)
           .send({ password: 'password12' });
+        should.not.exist(res.body.token);
         res.should.have.status(200);
 
         const loginRes = await chai.request(server)
@@ -90,7 +99,7 @@ describe('/users', () => {
           .auth(credentials.email, 'password12');
         loginRes.should.have.status(200);
         loginRes.body.should.have.property('token');
-      })
+      });
     });
   });
   describe('/signup POST', () => {
@@ -107,7 +116,7 @@ describe('/users', () => {
     it('should populate the database with a new user with nested credentials', async () => {
       const res = await chai.request(server)
         .post('/users/signup')
-        .send({ credentials: { email: 'test4@contoso.org', password: 'password' }});
+        .send({ credentials: { email: 'test4@contoso.org', password: 'password' } });
       res.should.have.status(200);
 
       const newUser = await User.findOne({ email: 'test4@contoso.org' }).exec();
@@ -134,7 +143,7 @@ describe('/users', () => {
   describe('/logout DELETE', () => {
     it('should cause subsequent requests to fail', async () => {
       const res = await chai.request(server)
-        .delete(`/users/logout`)
+        .delete('/users/logout')
         .set('Authorization', `Token token=${token}`);
       res.should.have.status(200);
 
@@ -145,14 +154,57 @@ describe('/users', () => {
     });
     it('should fail if already logged out', async () => {
       const res = await chai.request(server)
-        .delete(`/users/logout`)
+        .delete('/users/logout')
         .set('Authorization', `Token token=${token}`);
       res.should.have.status(200);
 
       const getRes = await chai.request(server)
-        .delete(`/users/logout`)
+        .delete('/users/logout')
         .set('Authorization', `Token token=${token}`);
       getRes.should.have.status(401);
     });
-  })
+  });
+  describe('/login POST', () => {
+    // make sure no-one is logged in
+    beforeEach(async () => {
+      await chai.request(server)
+        .delete('/users/logout')
+        .set('Authorization', `Token token=${token}`);
+    });
+    it('should succeed on login', async () => {
+      const res = await chai.request(server)
+        .post('/users/login')
+        .auth(credentials.email, credentials.password);
+      res.should.have.status(200);
+    });
+    it('should fail with no credentials', async () => {
+      const res = await chai.request(server)
+        .post('/users/login');
+      res.should.have.status(401);
+    });
+    it('should fail with incorrect password', async () => {
+      const res = await chai.request(server)
+        .post('/users/login')
+        .auth(credentials.email, 'das fake');
+      res.should.have.status(401);
+      res.body.should.be.an('object').and.have.property('error');
+      res.body.error.should.eq('Not Authorized');
+    });
+    it('should fail without token after Basic', async () => {
+      const res = await chai.request(server)
+        .post('/users/login')
+        .set('Authorization', 'Basic');
+      res.should.have.status(401);
+      res.body.should.be.an('object').and.have.property('error');
+      res.body.error.should.eq('Invalid authorization');
+    });
+    it('should fail without password in token', async () => {
+      const res = await chai.request(server)
+        .post('/users/login')
+        .auth(credentials.email);
+      res.should.have.status(401);
+      res.body.should.be.an('object').and.have.property('error');
+      res.body.error.should.eq('Invalid authorization');
+    });
+  });
 });

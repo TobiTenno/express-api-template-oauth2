@@ -7,17 +7,12 @@ const {
   combine, label, printf, colorize,
 } = format;
 
-const color = (scope = 'PROC') => {
+const color = (scope) => {
   let scoped;
+  /* istanbul ignore next */
   switch (scope.toUpperCase()) {
     case 'PROC':
       scoped = 'PROC'.magenta;
-      break;
-    case 'REST':
-      scoped = 'REST'.cyan;
-      break;
-    case 'SOCK':
-      scoped = 'SOCK'.yellow;
       break;
     default:
       scoped = scope.toUpperCase().red;
@@ -31,7 +26,7 @@ const color = (scope = 'PROC') => {
  * @param  {string} scope [description]
  * @returns {Object}       set up logger
  */
-const setup = (scope = 'PROC') => {
+const setup = (scope) => {
   /* Logger setup */
   const transport = new transports.Console({ colorize: true });
   const logFormat = printf((info) => `[${info.label}] ${info.level}: ${info.message}`);

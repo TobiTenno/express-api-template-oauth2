@@ -9,17 +9,6 @@
     "no-unused-expressions": "off",
     "valid-jsdoc": "off",
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "optionalDependencies": false, "peerDependencies": false}],
-    "no-unused-vars": [
-      "error",
-      {
-        "varsIgnorePattern": "should|expect"
-      }
-    ],
-    "no-undef": [
-      "error",
-      {
-        "varsIgnorePattern": "should|expect"
-      }
-    ]
+    "no-console": "off"
   }
 }

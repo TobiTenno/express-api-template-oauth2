@@ -1,11 +1,11 @@
 'use strict';
 
 /* eslint-disable func-names */
-
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
+// eslint-disable-next-line no-unused-vars
 const logger = require('../../lib/logger')('M-USER');
 
 const User = new mongoose.Schema({
@@ -30,7 +30,9 @@ User.methods.comparePassword = function (password) {
   if (compared) {
     return this.token;
   }
-  throw new Error('Not Authorized');
+  const err = new Error('Not Authorized');
+  err.status = 401;
+  throw err;
 };
 
 /**
@@ -45,10 +47,12 @@ User.virtual('password').set(function (password) {
 User.pre('save', function (next) {
   if (this._password) {
     const salt = bcrypt.genSaltSync(null);
+    /* istanbul ignore next */
     if (!salt) {
       throw new Error('no salt');
     }
     const digest = bcrypt.hashSync(this._password, salt);
+    /* istanbul ignore next */
     if (!digest) {
       throw new Error('no digest');
     }
@@ -56,16 +60,5 @@ User.pre('save', function (next) {
   }
   next();
 });
-
-User.methods.setPassword = function (password) {
-  try {
-    const salt = bcrypt.genSaltSync(null);
-    const digest = bcrypt.hashSync(password, salt);
-    this.passwordDigest = digest;
-    this.save();
-  } catch (e) {
-    logger.error(e);
-  }
-};
 
 module.exports = mongoose.model('User', User);

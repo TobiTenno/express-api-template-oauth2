@@ -1,10 +1,9 @@
 'use strict';
 
-const debug = require('debug')('express-template:server');
 const http = require('http');
 
 const app = require('./app');
-const logger = require('./lib/logger')();
+const logger = require('./lib/logger')('PROC');
 
 /*
  * Create HTTP server.
@@ -45,7 +44,7 @@ const onError = (error) => {
 const onListening = () => {
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
+  logger.debug(`Listening on ${bind}`);
 };
 
 /*

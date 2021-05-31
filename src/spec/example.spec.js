@@ -2,6 +2,8 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const mongoose = require('mongoose');
+
 const mockDB = require('./mocks/mockDB');
 const server = require('../app');
 
@@ -11,15 +13,14 @@ const User = require('../app/models/user');
 const should = chai.should();
 chai.use(chaiHttp);
 
-let connection;
 let token;
 let user;
 
 const credentials = { email: 'test@contso.org', password: 'password' };
 
-before(async () => {
-  connection = await mockDB.connect();
-});
+const technicallyValidId = new mongoose.Types.ObjectId();
+
+before(async () => mockDB.connect());
 
 beforeEach(async () => {
   try {
@@ -39,13 +40,12 @@ beforeEach(async () => {
 afterEach(async () => {
   await User.deleteMany({});
   await Example.deleteMany({});
-})
+});
 
 after(async () => {
-  mockDB.close();
-  connection = undefined;
   token = undefined;
   user = undefined;
+  return mockDB.close();
 });
 
 describe('/examples', () => {
@@ -62,7 +62,7 @@ describe('/examples', () => {
       await chai.request(server)
         .post('/examples')
         .set('Authorization', `Token token=${token}`)
-        .send({ text: 'This is a generic text example' })
+        .send({ text: 'This is a generic text example' });
       const res = await chai.request(server)
         .get('/examples')
         .set('Authorization', `Token token=${token}`);
@@ -126,9 +126,9 @@ describe('/examples', () => {
       });
       it('should fail on an invalid id', async () => {
         const res = await chai.request(server)
-          .get(`/examples/lookgarbage`)
+          .get(`/examples/${technicallyValidId}`)
           .set('Authorization', `Token token=${token}`);
-        res.should.have.status(500);
+        res.should.have.status(404);
       });
     });
     describe('PATCH', () => {
@@ -154,10 +154,10 @@ describe('/examples', () => {
       });
       it('should fail on an invalid id', async () => {
         const res = await chai.request(server)
-          .patch(`/examples/lookgarbage`)
+          .patch(`/examples/${technicallyValidId}`)
           .set('Authorization', `Token token=${token}`)
           .send({ text: 'Look! I can edit the text!' });
-        res.should.have.status(500);
+        res.should.have.status(404);
       });
     });
     describe('DELETE', () => {
@@ -178,9 +178,9 @@ describe('/examples', () => {
       });
       it('should fail on an invalid id', async () => {
         const res = await chai.request(server)
-          .delete(`/examples/lookgarbage`)
+          .delete(`/examples/${technicallyValidId}`)
           .set('Authorization', `Token token=${token}`);
-        res.should.have.status(500);
+        res.should.have.status(404);
       });
     });
   });

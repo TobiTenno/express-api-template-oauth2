@@ -63,7 +63,8 @@ router.post('/login', ah(async (req, res) => {
     if (!encoded) {
       return res.status(401).json({ error: 'Invalid authorization' });
     }
-    const plain = Buffer.from(encoded, 'base64').toString().split(':');
+    const plain = Buffer.from(encoded, 'base64').toString().split(':').filter((s) => s.length);
+
     if (plain.length !== 2) {
       return res.status(401).json({ error: 'Invalid authorization' });
     }
@@ -71,6 +72,8 @@ router.post('/login', ah(async (req, res) => {
       email: plain[0],
       password: plain[1],
     };
+  } else {
+    return res.status(401).json({ error: 'Invalid authorization' });
   }
   const search = { email: credentials.email };
   let user = await User.findOne(search);
@@ -85,16 +88,13 @@ router.post('/login', ah(async (req, res) => {
 
 router.delete('/logout', authenticate, ah(async (req, res) => {
   const token = await getToken();
-  const user = await User.findOneAndUpdate({
+  await User.findOneAndUpdate({
     _id: req.currentUser._id,
     token: req.currentUser.token,
   }, {
     token,
   });
-  if (user) {
-    return res.status(200).end();
-  }
-  return res.status(500).json({ error: 'Failed to log out user.' });
+  return res.status(200).end();
 }));
 
 router.patch('/:id', authenticate, ah(async (req, res) => {

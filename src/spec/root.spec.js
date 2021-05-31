@@ -2,8 +2,7 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const mockDB = require('./mocks/mockDB');
-const server = require('../app/');
+const server = require('../app');
 
 chai.should();
 chai.use(chaiHttp);
