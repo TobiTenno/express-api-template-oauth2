@@ -3,7 +3,9 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
-const mongod = new MongoMemoryServer();
+const mongod = new MongoMemoryServer({
+  version: '4.0.14',
+});
 
 module.exports.connect = async () => {
   await mongoose.disconnect();
