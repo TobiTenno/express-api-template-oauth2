@@ -7,7 +7,7 @@
     "start": "node src/server",
     "lint": "eslint src",
     "lint:fix": "eslint src/ --fix",
-    "test": "nyc --reporter=lcov --reporter=text mocha src/spec/**/*.spec.js --exit --timeout 60000",
+    "test": "nyc mocha",
     "dev": "nodemon"
   },
   "engines": {
@@ -39,6 +39,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
+    "flat-cache": "^3.0.4",
     "mocha": "^8.4.0",
     "mongodb-memory-server": "^6.9.6",
     "nodemon": "^2.0.7",
@@ -92,6 +93,19 @@
       "prettier"
     ]
   },
+  "mocha": {
+    "exit": true,
+    "spec": "src/spec/**/*.spec.js",
+    "require": [
+      "src/spec/hooks/db.js"
+    ],
+    "growl": true,
+    "enableSourceMaps": true,
+    "checkLeaks": true,
+    "normal": 500,
+    "slow": 2000,
+    "fullStack": true
+  },
   "nodemonConfig": {
     "env": {
       "LOG_LEVEL": "info",
@@ -103,6 +117,11 @@
     ]
   },
   "nyc": {
-    "exclude": "src/spec/**"
+    "exclude": "src/spec/**",
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "skip-full": true
   }
 }

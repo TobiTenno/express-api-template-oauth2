@@ -64,7 +64,6 @@ router.post('/login', ah(async (req, res) => {
       return res.status(401).json({ error: 'Invalid authorization' });
     }
     const plain = Buffer.from(encoded, 'base64').toString().split(':').filter((s) => s.length);
-
     if (plain.length !== 2) {
       return res.status(401).json({ error: 'Invalid authorization' });
     }

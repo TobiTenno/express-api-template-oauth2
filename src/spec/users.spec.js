@@ -2,61 +2,36 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const mongoose = require('mongoose');
-const decache = require('decache');
-
-const mockDB = require('./mocks/mockDB');
 const server = require('../app');
-
-const User = require('../app/models/user');
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-let token;
-let user;
+const {
+  login, signup, credentials, technicallyValidId,
+} = require('./hooks/shared');
 
-const credentials = { email: 'test@contso.org', password: 'password' };
-
-const technicallyValidId = new mongoose.Types.ObjectId();
+let User;
 
 describe('/users', () => {
-  before(async () => mockDB.connect());
+  User = require('../app/models/user');
+  let token;
+  let user;
+
   beforeEach(async () => {
-    try {
-      await chai.request(server)
-        .post('/users/signup')
-        .send(credentials);
-      const res = await chai.request(server)
-        .post('/users/login')
-        .auth(credentials.email, credentials.password);
-      token = res.body.token;
-      user = res.body;
-    } catch (e) {
-      console.error(e);
-    }
-  });
-  afterEach(async () => {
-    await User.deleteMany({});
-  });
-  after(async () => {
-    try {
-      user = undefined;
-      token = undefined;
-      return mockDB.close();
-    } finally {
-      decache('./mocks/mockDB');
-      decache('mongoose');
-    }
+    await signup();
+    user = await login();
+    token = user.token;
   });
 
   it('should return all current users', async () => {
+    const total = await User.estimatedDocumentCount();
     const res = await chai.request(server)
       .get('/users')
       .set('Authorization', `Token token=${token}`);
     res.should.have.status(200);
     res.body.should.be.an('array');
-    res.body.length.should.be.eq(1);
+    res.body.length.should.be.eq(total);
     res.body[0].email.should.not.be.undefined;
     res.body[0].email.should.eq(credentials.email);
   });

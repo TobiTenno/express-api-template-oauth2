@@ -2,69 +2,40 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const mongoose = require('mongoose');
-const decache = require('decache');
 
-const mockDB = require('./mocks/mockDB');
+const { login, signup, technicallyValidId } = require('./hooks/shared');
 const server = require('../app');
 
-const Example = require('../app/models/example');
-const User = require('../app/models/user');
+let Example;
 
 const should = chai.should();
 chai.use(chaiHttp);
 
-let token;
-let user;
-
-const credentials = { email: 'test@contso.org', password: 'password' };
-
-const technicallyValidId = new mongoose.Types.ObjectId();
-
 describe('/examples', () => {
-  before(async () => mockDB.connect());
+  Example = require('../app/models/example');
+  let token;
+  let user;
+
   beforeEach(async () => {
-    try {
-      await chai.request(server)
-        .post('/users/signup')
-        .send(credentials);
-      const resp = await chai.request(server)
-        .post('/users/login')
-        .auth(credentials.email, credentials.password);
-      token = resp.body.token;
-      user = resp.body;
-    } catch (e) {
-      console.error(e);
-    }
+    await signup();
+    user = await login();
+    token = user.token;
   });
-  afterEach(async () => {
-    await User.deleteMany({});
-    await Example.deleteMany({});
-  });
-  after(async () => {
-    try {
-      user = undefined;
-      token = undefined;
-      return mockDB.close();
-    } finally {
-      decache('./mocks/mockDB');
-      decache('mongoose');
-    }
-  });
+
   describe('GET', () => {
     it('should return nothing when no examples exist', async () => {
       const res = await chai.request(server)
-        .get('/examples')
-        .set('Authorization', `Token token=${token}`);
+        .get('/examples');
       res.should.have.status(200);
       res.body.should.be.an('array');
       res.body.length.should.be.eq(0);
     });
     it('should return 1 when an example exists', async () => {
-      await chai.request(server)
+      const insert = await chai.request(server)
         .post('/examples')
         .set('Authorization', `Token token=${token}`)
         .send({ text: 'This is a generic text example' });
+      insert.should.have.status(200);
       const res = await chai.request(server)
         .get('/examples')
         .set('Authorization', `Token token=${token}`);
@@ -101,7 +72,7 @@ describe('/examples', () => {
         .send({ text: 'This is a generic text example' })).body;
     });
     describe('GET', () => {
-      it('should not authentication', async () => {
+      it('should not require authentication', async () => {
         const res = await chai.request(server)
           .get(`/examples/${example._id}`);
         res.should.have.status(200);

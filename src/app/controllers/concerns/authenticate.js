@@ -23,6 +23,7 @@ const authenticate = async (req, res, next) => {
   const tokenRegex = /^Token token=/;
   const separatorRegex = /\s*(?::|;|\t+)\s*/;
   const { authorization: auth } = req.headers;
+
   if (auth && tokenRegex.test(auth)) {
     const opts = auth.replace(tokenRegex, '').split(separatorRegex);
     const signedToken = opts.shift();
