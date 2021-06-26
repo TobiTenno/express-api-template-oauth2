@@ -9,10 +9,7 @@ const MessageVerifier = require('../../../lib/MessageVerifier');
 // eslint-disable-next-line no-unused-vars
 const logger = require('../../../lib/logger')('C-AUTH');
 
-const decodeToken = (signedSecureToken) => {
-  const mv = new MessageVerifier('secure-token', process.env.SECRET_KEY);
-  return mv.verify(signedSecureToken);
-};
+const decodeToken = (signedSecureToken) => MessageVerifier.verify(signedSecureToken);
 
 const accessDenied = (res) => {
   res.set('WWW-Authenticate', 'Token realm="Application"');
@@ -23,7 +20,6 @@ const authenticate = async (req, res, next) => {
   const tokenRegex = /^Token token=/;
   const separatorRegex = /\s*(?::|;|\t+)\s*/;
   const { authorization: auth } = req.headers;
-
   if (auth && tokenRegex.test(auth)) {
     const opts = auth.replace(tokenRegex, '').split(separatorRegex);
     const signedToken = opts.shift();

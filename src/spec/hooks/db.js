@@ -1,7 +1,8 @@
 'use strict';
 
 process.env.CI = true;
-process.env.SECRET_KEY = 'superduperpassword';
+process.env.SECRET_KEY = 'obCltwRpN3Yn29i7Z8Y1sZwZlIR5MDm9';
+process.env.INITIALIZATION_VECTOR = '254vi2tCl86fLtUL';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
