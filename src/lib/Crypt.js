@@ -29,7 +29,7 @@ module.exports = class AESCrypt {
   }
 
   static digest(data) {
-    return crypto.createHmac(HMAC_ALGORITHM, 'secure-token')
+    return crypto.createHmac(HMAC_ALGORITHM, ENCRYPTION_KEY)
       .update(data)
       .digest(CIPHER_TEXT_ENCODING);
   }
