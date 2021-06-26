@@ -12,15 +12,12 @@ const authenticate = require('./concerns/authenticate');
 const MessageVerifier = require('../../lib/MessageVerifier');
 
 const User = models.user;
-const encodeToken = (token) => {
-  const mv = new MessageVerifier('secure-token', process.env.SECRET_KEY);
-  return mv.generate(token);
-};
 
-const getToken = async () => {
-  const data = crypto.randomBytes(16);
-  return data.toString('base64');
-};
+const encodeToken = (token) => MessageVerifier.generate(token);
+
+const getToken = async () => crypto
+  .randomBytes(16)
+  .toString('base64');
 
 const userFilter = { passwordDigest: 0, token: 0 };
 
