@@ -13,9 +13,9 @@ sed -i "s/%NAME%/$NAME/g" .github/template-cleanup/*
 sed -i "s^%GITHUB_REPOSITORY%^$GITHUB_REPOSITORY^g" .github/template-cleanup/*
 
 # Replace template artifact name in project files with $NAME
-find src -type f -exec sed -i "s/express-api-template/$SAFE_NAME/g" {} +
-find src -type f -exec sed -i "s/express-template/$NAME/g" {} +
-find src -type f -exec sed -i "s/express-api-template-oauth2/$SAFE_NAME/g" {} +
+find . -type f -exec sed -i "s/express-api-template/$SAFE_NAME/g" {} +
+find . -type f -exec sed -i "s/express-template/$NAME/g" {} +
+find . -type f -exec sed -i "s/express-api-template-oauth2/$SAFE_NAME/g" {} +
 
 # Move content
 cp -R .github/template-cleanup/* .

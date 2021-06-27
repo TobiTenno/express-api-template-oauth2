@@ -1,7 +1,6 @@
 # %NAME%
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+API powered by express with OAuth-patterned superpowers.
 
 ## Dependencies
 
