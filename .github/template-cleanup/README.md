@@ -1,4 +1,4 @@
-# express-api-template-oauth2
+# %NAME%
 
 A template for starting projects with `express` as an API. Includes
 authentication and common middlewares.
@@ -18,10 +18,6 @@ Fix any conflicts.
 
 ## Installation
 
-1.  Click the "Use this template" button on the root page of the repository
-1.  Replace all instances of `'express-template'` with your app name. This
-    includes `package.json`, various debugger configurations, and the MongoDB
-    store.
 1.  Install dependencies with `npm install`.
 1.  Set a SECRET_KEY in the environment (`.env` file or process manager of your choice).
 1.  Run the API server with `npm start`. If you want your code to be reloaded on
@@ -42,6 +38,7 @@ Dependencies are stored in [`package.json`](package.json).
 
 Developers should store JavaScript files in [`src/app/controllers`](src/app/controllers)
  and [`src/app/models`](src/app/models).
+
 
 Routes should follow express patterns for using index.js files in folders, such as `app.use('/examples', require('./examples'))` from [`src/app/controllers/index.js`](src/app/controllers/index.js)
 
