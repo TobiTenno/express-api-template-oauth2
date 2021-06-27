@@ -5,17 +5,15 @@ export LANG=C
 
 # Prepare variables
 NAME="${GITHUB_REPOSITORY##*/}"
-SAFE_NAME=$(echo $NAME | sed 's/[^a-zA-Z0-9]//g' | tr '[:upper:]' '[:lower:]')
-
 
 # Replace placeholders in the template-cleanup files
 sed -i "s/%NAME%/$NAME/g" .github/template-cleanup/*
 sed -i "s^%GITHUB_REPOSITORY%^$GITHUB_REPOSITORY^g" .github/template-cleanup/*
 
 # Replace template artifact name in project files with $NAME
-find . -type f -exec sed -i "s/express-api-template/$SAFE_NAME/g" {} +
-find . -type f -exec sed -i "s/express-template/$NAME/g" {} +
-find . -type f -exec sed -i "s/express-api-template-oauth2/$SAFE_NAME/g" {} +
+find . -type f -exec sed -i "s/express-api-template-oauth2/$NAME/ig" {} +
+find . -type f -exec sed -i "s/express-api-template/$NAME/ig" {} +
+find . -type f -exec sed -i "s/express-template/$NAME/ig" {} +
 
 # Move content
 cp -R .github/template-cleanup/* .
