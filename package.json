@@ -24,7 +24,7 @@
     "mongoose": "^5.12.3",
     "mongoose-unique-validator": "^2.0.3",
     "multer": "^1.1.0",
-    "prom-client": "^10.2.3",
+    "prom-client": "^13.1.0",
     "serve-favicon": "^2.5.0",
     "swagger-stats": "^0.99.1",
     "winston": "^3.3.3",
