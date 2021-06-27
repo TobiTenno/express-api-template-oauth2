@@ -39,7 +39,6 @@ Dependencies are stored in [`package.json`](package.json).
 Developers should store JavaScript files in [`src/app/controllers`](src/app/controllers)
  and [`src/app/models`](src/app/models).
 
-
 Routes should follow express patterns for using index.js files in folders, such as `app.use('/examples', require('./examples'))` from [`src/app/controllers/index.js`](src/app/controllers/index.js)
 
 ## Tasks
