@@ -21,9 +21,9 @@ cp -R .github/template-cleanup/* .
 
 # Cleanup
 rm -rf \
-  LICENSE
-  src/app/controllers/examples.js
-  src/spec/example.spec.js
-  .github/template-cleanup/
-  .github/workflows/template-cleanup.yml
+  LICENSE \
+  src/app/controllers/examples.js \
+  src/spec/example.spec.js \
+  .github/template-cleanup/ \
+  .github/workflows/template-cleanup.yml \
   cleanup.sh
