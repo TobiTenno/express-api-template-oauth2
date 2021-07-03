@@ -26,7 +26,7 @@
     "multer": "^1.1.0",
     "prom-client": "^10.2.3",
     "serve-favicon": "^2.5.0",
-    "swagger-stats": "^0.99.1",
+    "swagger-stats": "^0.99.2",
     "winston": "^3.3.3",
     "yaml": "^1.10.2"
   },
