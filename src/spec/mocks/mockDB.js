@@ -3,14 +3,16 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 
-const mongod = new MongoMemoryServer({
-  version: '4.0.14',
-});
+let mongod;
 
 module.exports.connect = async () => {
-  await mongoose.disconnect();
+  if (mongoose) await mongoose.disconnect();
 
-  const uri = await mongod.getUri();
+  mongod = await MongoMemoryServer.create({
+    version: '4.0.14',
+  });
+
+  const uri = mongod.getUri();
 
   const mongooseOpts = {
     useNewUrlParser: true,
