@@ -23,7 +23,7 @@ const swaggerOptions = {
 // set up rate limiter: maximum of five requests per minute
 const limiter = new RateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 100,
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000000,
 });
 
 module.exports = (app) => {
