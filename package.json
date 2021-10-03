@@ -8,12 +8,16 @@
     "lint": "eslint src",
     "lint:fix": "eslint src/ --fix",
     "test": "nyc mocha",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build:openapi": "npx swagger-jsdoc -d src/scripts/swaggerDefinition.js src/app/controllers/*.js -o openapi.yaml",
+    "lint:openapi": "npx @redocly/openapi-cli lint openapi.yaml",
+    "preview:openapi": "npx @redocly/openapi-cli preview-docs openapi.yaml --config .redoclyrc"
   },
   "engines": {
     "node": ">= 14.14.0"
   },
   "dependencies": {
+    "apicache": "^1.6.2",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
@@ -21,10 +25,12 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
+    "express-rate-limit": "^5.4.0",
     "mongoose": "^5.13.9",
     "mongoose-unique-validator": "^2.0.3",
     "multer": "^1.4.3",
     "prom-client": "^10.2.3",
+    "redoc-express": "^1.0.0",
     "serve-favicon": "^2.5.0",
     "swagger-stats": "^0.99.2",
     "winston": "^3.3.3",
@@ -107,17 +113,21 @@
   },
   "nodemonConfig": {
     "env": {
-      "LOG_LEVEL": "info",
+      "LOG_LEVEL": "debug",
       "SECRET_KEY": "obCltwRpN3Yn29i7Z8Y1sZwZlIR5MDm9",
       "INITIALIZATION_VECTOR": "254vi2tCl86fLtUL",
-      "ENABLE_SWAGGER": true
+      "ENABLE_SWAGGER": true,
+      "PORT": 3000
     },
     "ignore": [
       "src/spec/*.js"
     ]
   },
   "nyc": {
-    "exclude": "src/spec/**",
+    "exclude": [
+      "src/spec/**",
+      "src/app/controllers/index.js"
+    ],
     "reporter": [
       "lcov",
       "text"

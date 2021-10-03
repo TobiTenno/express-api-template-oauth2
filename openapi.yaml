@@ -1,252 +1,11 @@
 openapi: 3.0.2
 info:
-  description: "This is a sample server Example server."
-  version: 0.0.0-dev
   title: Express API Template
-paths:
-  /:
-    get:
-      tags:
-        - Default
-      summary: Get environment
-      description: ""
-      operationId: Default
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  index:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: Express Template
-                      environment:
-                        type: object
-  /users:
-    get:
-      tags:
-        - user
-      summary: Get all users
-      description: ""
-      operationId: getAllUser
-      security:
-        - BearerAuth
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
-        "404":
-          description: User not found
-  /users/signup:
-    post:
-      tags:
-        - user
-      summary: Signs user up for the system
-      description: ""
-      operationId: signupUser
-      requestBody:
-        $ref: '#/components/requestBodies/Credentials'
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        "401":
-          description: Invalid username/password supplied
-  /users/login:
-    post:
-      tags:
-        - user
-      summary: Logs user into the system
-      description: ""
-      operationId: loginUser
-      security:
-        - Basic
-      responses:
-        "200":
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/json:
-              schema:
-                type: string
-        "401":
-          description: Invalid username/password supplied
-  /users/logout:
-    delete:
-      tags:
-        - user
-      summary: Logs out current logged in user session
-      description: ""
-      operationId: logoutUser
-      security:
-        - BearerAuth
-      responses:
-        default:
-          description: successful operation
-  "/users/{id}":
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      description: ""
-      operationId: getUserByName
-      security:
-        - BearerAuth
-      parameters:
-        - name: id
-          in: path
-          description: "The id of the user that needs to be fetched."
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-        "404":
-          description: User not found
-    patch:
-      tags:
-        - user
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      security:
-        - BearerAuth
-      parameters:
-        - name: id
-          in: path
-          description: name that need to be updated
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-        description: Updated user object
-        required: true
-      responses:
-        "400":
-          description: Invalid user supplied
-        "404":
-          description: User not found
-  /examples:
-    get:
-      tags:
-        - examples
-      summary: Get all examples
-      description: ""
-      operationId: getAllExample
-      security:
-        - BearerAuth
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Example"
-        "400":
-          description: Invalid username supplied
-        "404":
-          description: User not found
-    post:
-      tags:
-        - examples
-      summary: Make a new example object
-      operationId: createExample
-      requestBody:
-        $ref: '#/components/requestBodies/Example'
-  /examples/{id}:
-    get:
-      tags:
-        - examples
-      summary: Get a single example by id
-      operationId: getExampleById
-      parameters:
-        - name: id
-          in: path
-          description: The id of the example to be fetched
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Operation successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Example'
-    patch:
-      tags:
-        - examples
-      security:
-        - BearerAuth
-      summary: Modify an example
-      requestBody:
-        $ref: '#/components/requestBodies/Example'
-      parameters:
-        - name: id
-          in: path
-          description: The id of the example to be fetched
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Operation successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Example'
-    delete:
-      tags:
-        - examples
-      summary: Delete an example
-      security:
-        - BearerAuth
-      requestBody:
-        $ref: '#/components/requestBodies/Example'
-      parameters:
-        - name: id
-          in: path
-          description: The id of the example to be fetched
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Operation successful
+  version: 0.0.0-dev
+  description: This is a sample server Example server.
+  license:
+    name: MIT
+    url: https://mit-license.org/
 externalDocs:
   description: Read more about this API
   url: https://github.com/TobiTenno/express-api-template-Oauth2
@@ -255,30 +14,31 @@ servers:
 components:
   securitySchemes:
     BearerAuth:
-      description: Bearer Token authentication. Prefix is "Token token="
+      description: Bearer Token authentication. Prefix is "Bearer"
       type: http
       scheme: bearer
     Basic:
-      description: |
-        Basic HTTP Authentication. Base-64 string in format of 'email:password'
+      description: Basic HTTP Authentication. Base-64 string in format of 'email:password'
       type: http
       scheme: basic
   requestBodies:
-    Credentials:
-      description: User credentials
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Credentials"
     Example:
       description: Example body
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Example'
+            $ref: "#/components/schemas/Example"
   schemas:
+    Example:
+      type: object
+      properties:
+        _owner:
+          type: string
+          description: |
+            Owner's user id.
+        text:
+          type: string
     ApiResponse:
       type: object
       properties:
@@ -302,18 +62,10 @@ components:
           type: string
           example: ThisisaReallyBadPassword
         password_confirmation:
-          description: password confirmation field. Only checked on signup, should match sibling password
+          description: password confirmation field. Only checked on signup, should match
+            sibling password
           type: string
           example: ThisisaReallyBadPassword
-    Example:
-      type: object
-      properties:
-        "_owner":
-          type: string
-          description: |
-            Owner's user id.
-        text:
-          type: string
     User:
       type: object
       description: |
@@ -337,3 +89,259 @@ components:
         token:
           type: string
           description: Bearer
+paths:
+  /examples:
+    get:
+      tags:
+        - examples
+      summary: Get all examples
+      description: ""
+      operationId: getAllExample
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Example"
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+    post:
+      tags:
+        - examples
+      summary: Make a new example object
+      operationId: createExample
+      requestBody:
+        $ref: "#/components/requestBodies/Example"
+      responses:
+        "200":
+          description: Operation Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Example"
+  "/examples/{id}":
+    get:
+      tags:
+        - examples
+      summary: Get a single example by id
+      operationId: getExampleById
+      parameters:
+        - name: id
+          in: path
+          description: The id of the example to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Example"
+    patch:
+      tags:
+        - examples
+      security:
+        - BearerAuth: []
+      summary: Modify an example
+      requestBody:
+        $ref: "#/components/requestBodies/Example"
+      parameters:
+        - name: id
+          in: path
+          description: The id of the example to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Example"
+    delete:
+      tags:
+        - examples
+      summary: Delete an example
+      security:
+        - BearerAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/Example"
+      parameters:
+        - name: id
+          in: path
+          description: The id of the example to be fetched
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Operation successful
+  /:
+    get:
+      tags:
+        - Default
+      summary: Get environment
+      operationId: root
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  index:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      operationId: getAllUser
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+  "/users/{id}":
+    get:
+      tags:
+        - User
+      summary: Get user by user name
+      operationId: getUserByName
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: The id of the user that needs to be fetched.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+    patch:
+      tags:
+        - User
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: name that need to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        description: Updated user object
+        required: true
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid user supplied
+        "404":
+          description: User not found
+  /users/signup:
+    post:
+      tags:
+        - User
+      summary: Signs user up for the system
+      description: ""
+      operationId: signupUser
+      requestBody:
+        $ref: "#/components/schemas/Credentials"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Invalid username/password supplied
+  /users/login:
+    post:
+      tags:
+        - User
+      summary: Logs user into the system
+      description: ""
+      operationId: loginUser
+      security:
+        - Basic: []
+      responses:
+        "200":
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                type: string
+        "401":
+          description: Invalid username/password supplied
+  /users/logout:
+    delete:
+      tags:
+        - User
+      summary: Logs out current logged in user session
+      description: ""
+      operationId: logoutUser
+      security:
+        - BearerAuth: []
+      responses:
+        default:
+          description: successful operation
+tags:
+  - name: examples
+    description: Example endpoints for learning
+  - name: User
+    description: Interacts with the User schema

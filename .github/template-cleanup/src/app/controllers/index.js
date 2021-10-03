@@ -21,6 +21,5 @@ router.get('/docs', redoc({
 }));
 
 router.use('/users', require('./users'));
-router.use('/examples', require('./examples'));
 
 module.exports = router;

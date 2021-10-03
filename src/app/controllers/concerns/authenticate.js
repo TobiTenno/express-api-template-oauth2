@@ -16,8 +16,8 @@ const accessDenied = (res) => {
   res.status(401).send('HTTP Token: Access denied.');
 };
 
-const authenticate = async (req, res, next) => {
-  const tokenRegex = /^Token token=/;
+module.exports = async (req, res, next) => {
+  const tokenRegex = /^Bearer /;
   const separatorRegex = /\s*(?::|;|\t+)\s*/;
   const { authorization: auth } = req.headers;
   if (auth && tokenRegex.test(auth)) {
@@ -32,5 +32,3 @@ const authenticate = async (req, res, next) => {
   }
   return accessDenied(res);
 };
-
-module.exports = authenticate;
