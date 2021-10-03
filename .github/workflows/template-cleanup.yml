@@ -32,7 +32,7 @@ jobs:
           node-version: 16.x
       - name: Install Dependencies
         run: npm install
-      - name Update openapi.yaml
+      - name: Update openapi.yaml
         run: npx -y swagger-jsdoc -d src/scripts/swaggerDefinition.js src/app/controllers/*.js -o openapi.yaml
       # Commit modified files
       - name: Commit files
