@@ -28,7 +28,7 @@ describe('/users', () => {
     const total = await User.estimatedDocumentCount();
     const res = await chai.request(server)
       .get('/users')
-      .set('Authorization', `Token token=${token}`);
+      .auth(token, { type: 'bearer' });
     res.should.have.status(200);
     res.body.should.be.an('array');
     res.body.length.should.be.eq(total);
@@ -40,7 +40,7 @@ describe('/users', () => {
       it('should return user with provided id', async () => {
         const res = await chai.request(server)
           .get(`/users/${user._id}`)
-          .set('Authorization', `Token token=${token}`);
+          .auth(token, { type: 'bearer' });
         res.should.have.status(200);
         res.body.should.be.an('object');
         res.body.email.should.not.be.undefined;
@@ -49,7 +49,7 @@ describe('/users', () => {
       it('should fail if the user doesn\'t exist', async () => {
         const res = await chai.request(server)
           .get(`/users/${technicallyValidId}`)
-          .set('Authorization', `Token token=${token}`);
+          .auth(token, { type: 'bearer' });
         res.should.have.status(404);
         res.body.should.be.an('object').and.have.property('error');
         res.body.error.should.eq('No such user');
@@ -59,7 +59,7 @@ describe('/users', () => {
       it('should modify user email', async () => {
         const res = await chai.request(server)
           .patch(`/users/${user._id}`)
-          .set('Authorization', `Token token=${token}`)
+          .auth(token, { type: 'bearer' })
           .send({ email: 'test2@contoso.org' });
         res.should.have.status(200);
 
@@ -70,7 +70,7 @@ describe('/users', () => {
       it('should modify user password', async () => {
         const res = await chai.request(server)
           .patch(`/users/${user._id}`)
-          .set('Authorization', `Token token=${token}`)
+          .auth(token, { type: 'bearer' })
           .send({ password: 'password12' });
         should.not.exist(res.body.token);
         res.should.have.status(200);
@@ -125,23 +125,23 @@ describe('/users', () => {
     it('should cause subsequent requests to fail', async () => {
       const res = await chai.request(server)
         .delete('/users/logout')
-        .set('Authorization', `Token token=${token}`);
+        .auth(token, { type: 'bearer' });
       res.should.have.status(200);
 
       const getRes = await chai.request(server)
         .get('/users')
-        .set('Authorization', `Token token=${token}`);
+        .auth(token, { type: 'bearer' });
       getRes.should.have.status(401);
     });
     it('should fail if already logged out', async () => {
       const res = await chai.request(server)
         .delete('/users/logout')
-        .set('Authorization', `Token token=${token}`);
+        .auth(token, { type: 'bearer' });
       res.should.have.status(200);
 
       const getRes = await chai.request(server)
         .delete('/users/logout')
-        .set('Authorization', `Token token=${token}`);
+        .auth(token, { type: 'bearer' });
       getRes.should.have.status(401);
     });
   });
@@ -150,7 +150,7 @@ describe('/users', () => {
     beforeEach(async () => {
       await chai.request(server)
         .delete('/users/logout')
-        .set('Authorization', `Token token=${token}`);
+        .auth(token, { type: 'bearer' });
     });
     it('should succeed on login', async () => {
       const res = await chai.request(server)

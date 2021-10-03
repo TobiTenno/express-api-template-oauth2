@@ -33,12 +33,12 @@ describe('/examples', () => {
     it('should return 1 when an example exists', async () => {
       const insert = await chai.request(server)
         .post('/examples')
-        .set('Authorization', `Token token=${token}`)
+        .auth(token, { type: 'bearer' })
         .send({ text: 'This is a generic text example' });
       insert.should.have.status(200);
       const res = await chai.request(server)
         .get('/examples')
-        .set('Authorization', `Token token=${token}`);
+        .auth(token, { type: 'bearer' });
       res.should.have.status(200);
       res.body.should.be.an('array');
       res.body.length.should.be.eq(1);
@@ -55,7 +55,7 @@ describe('/examples', () => {
     it('should return the example', async () => {
       const res = await chai.request(server)
         .post('/examples')
-        .set('Authorization', `Token token=${token}`)
+        .auth(token, { type: 'bearer' })
         .send({ text: 'This is a generic text example' });
       res.should.have.status(200);
       res.body.should.be.an('object');
@@ -68,7 +68,7 @@ describe('/examples', () => {
     beforeEach(async () => {
       example = (await chai.request(server)
         .post('/examples')
-        .set('Authorization', `Token token=${token}`)
+        .auth(token, { type: 'bearer' })
         .send({ text: 'This is a generic text example' })).body;
     });
     describe('GET', () => {
@@ -87,7 +87,7 @@ describe('/examples', () => {
       it('should return corresponding example', async () => {
         const res = await chai.request(server)
           .get(`/examples/${example._id}`)
-          .set('Authorization', `Token token=${token}`);
+          .auth(token, { type: 'bearer' });
         res.should.have.status(200);
         res.body.should.be.an('object');
         res.body.should.have.property('text');
@@ -100,7 +100,7 @@ describe('/examples', () => {
       it('should fail on an invalid id', async () => {
         const res = await chai.request(server)
           .get(`/examples/${technicallyValidId}`)
-          .set('Authorization', `Token token=${token}`);
+          .auth(token, { type: 'bearer' });
         res.should.have.status(404);
       });
     });
@@ -115,7 +115,7 @@ describe('/examples', () => {
       it('should edit the example', async () => {
         const res = await chai.request(server)
           .patch(`/examples/${example._id}`)
-          .set('Authorization', `Token token=${token}`)
+          .auth(token, { type: 'bearer' })
           .send({ text: 'Look! I can edit the text!' });
         res.should.have.status(200);
 
@@ -128,7 +128,7 @@ describe('/examples', () => {
       it('should fail on an invalid id', async () => {
         const res = await chai.request(server)
           .patch(`/examples/${technicallyValidId}`)
-          .set('Authorization', `Token token=${token}`)
+          .auth(token, { type: 'bearer' })
           .send({ text: 'Look! I can edit the text!' });
         res.should.have.status(404);
       });
@@ -143,7 +143,7 @@ describe('/examples', () => {
       it('should delete an example', async () => {
         const res = await chai.request(server)
           .delete(`/examples/${example._id}`)
-          .set('Authorization', `Token token=${token}`);
+          .auth(token, { type: 'bearer' });
         res.should.have.status(200);
 
         const deletedExample = await Example.findOne({ _id: example._id, _owner: user._id });
@@ -152,7 +152,7 @@ describe('/examples', () => {
       it('should fail on an invalid id', async () => {
         const res = await chai.request(server)
           .delete(`/examples/${technicallyValidId}`)
-          .set('Authorization', `Token token=${token}`);
+          .auth(token, { type: 'bearer' });
         res.should.have.status(404);
       });
     });
