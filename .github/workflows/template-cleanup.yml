@@ -21,12 +21,19 @@ jobs:
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
-
       # Cleanup project
       - name: Cleanup
         run: |
           chmod +x .github/template-cleanup/cleanup.sh
           ./.github/template-cleanup/cleanup.sh
+      # Generate new OpenAPI
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Install Dependencies
+        run: npm install
+      - name Update openapi.yaml
+        run: npx -y swagger-jsdoc -d src/scripts/swaggerDefinition.js src/app/controllers/*.js -o openapi.yaml
       # Commit modified files
       - name: Commit files
         run: |
