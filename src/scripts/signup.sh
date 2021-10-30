@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl --include --request POST http://localhost:3001/users/signup \
+curl --include --request POST http://localhost:3000/users/signup \
   --header "Content-Type: application/json" \
   --data '{
     "credentials": {
@@ -10,7 +10,7 @@ curl --include --request POST http://localhost:3001/users/signup \
     }
   }'
 
-curl --include --request POST http://localhost:3001/users/signup \
+curl --include --request POST http://localhost:3000/users/signup \
   --header "Content-Type: application/json" \
   --data '{
     "credentials": {
