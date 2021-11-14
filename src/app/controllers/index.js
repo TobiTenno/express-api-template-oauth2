@@ -12,9 +12,11 @@ const definition = require('../../scripts/swaggerDefinition');
 
 router.use('/', require('./root'));
 
-router.get('/docs/openapi.yaml',
+router.get(
+  '/docs/openapi.yaml',
   cache('24 hours'),
-  (req, res) => res.sendFile(path.join(__dirname, '../../../', 'openapi.yaml')));
+  (req, res) => res.sendFile(path.join(__dirname, '../../../', 'openapi.yaml')),
+);
 router.get('/docs', redoc({
   title: definition.info.title,
   specUrl: '/docs/openapi.yaml',
