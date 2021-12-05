@@ -45,6 +45,7 @@ User.virtual('password').set(function (password) {
 });
 
 User.pre('save', function (next) {
+  /* istanbul ignore else */
   if (this._password) {
     const salt = bcrypt.genSaltSync(null);
     /* istanbul ignore next */

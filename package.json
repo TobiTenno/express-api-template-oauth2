@@ -37,6 +37,10 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-private-methods": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
     "decache": "^4.6.1",
@@ -56,8 +60,15 @@
       "prettier",
       "airbnb-base"
     ],
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
-      "sourceType": "script"
+      "sourceType": "script",
+      "babelOptions": {
+        "plugins": [
+          "@babel/plugin-proposal-class-properties",
+          "@babel/plugin-proposal-private-methods"
+        ]
+      }
     },
     "rules": {
       "valid-jsdoc": [
@@ -136,5 +147,14 @@
     "sourceMap": true,
     "produce-source-map": true,
     "skip-full": true
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-private-methods"
+    ]
   }
 }

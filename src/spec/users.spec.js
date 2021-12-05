@@ -56,30 +56,58 @@ describe('/users', () => {
       });
     });
     describe('PATCH', () => {
-      it('should modify user email', async () => {
+      it('should modify user password', async () => {
+        const password = 'password12';
         const res = await chai.request(server)
           .patch(`/users/${user._id}`)
           .auth(token, { type: 'bearer' })
-          .send({ email: 'test2@contoso.org' });
+          .send({ password });
+        should.exist(res.body.token);
+        res.body.should.not.have.property('password');
         res.should.have.status(200);
+        res.body.should.not.have.property('errors');
+        res.body.should.not.have.property('error');
+
+        const loginRes = await login({ password });
+        loginRes.should.have.property('token');
+        loginRes.should.not.have.property('error');
+      });
+      it('should modify user email', async () => {
+        const email = 'test2@contoso.org';
+        const res = await chai.request(server)
+          .patch(`/users/${user._id}`)
+          .auth(token, { type: 'bearer' })
+          .send({ email });
+        res.should.have.status(200);
+        res.body.should.not.have.property('errors');
+        res.body.should.not.have.property('error');
 
         const editedUser = await User.findOne({ _id: user._id }).exec();
         should.exist(editedUser);
-        editedUser.email.should.eq('test2@contoso.org');
+        editedUser.email.should.eq(email);
+
+        const loginRes = await login({ email });
+        loginRes.should.have.property('token');
       });
-      it('should modify user password', async () => {
+      it('should error with no edits', async () => {
         const res = await chai.request(server)
           .patch(`/users/${user._id}`)
           .auth(token, { type: 'bearer' })
-          .send({ password: 'password12' });
+          .send({});
         should.not.exist(res.body.token);
-        res.should.have.status(200);
-
-        const loginRes = await chai.request(server)
-          .post('/users/login')
-          .auth(credentials.email, 'password12');
-        loginRes.should.have.status(200);
-        loginRes.body.should.have.property('token');
+        res.should.have.status(400);
+        should.exist(res.body.error);
+        res.body.error.should.eq('No modified field.');
+      });
+      it('should error with no valid user', async () => {
+        const res = await chai.request(server)
+          .patch(`/users/${technicallyValidId}`)
+          .auth(token, { type: 'bearer' })
+          .send({});
+        should.not.exist(res.body.token);
+        res.should.have.status(404);
+        should.exist(res.body.error);
+        res.body.error.should.eq('No such user');
       });
     });
   });

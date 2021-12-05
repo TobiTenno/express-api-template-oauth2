@@ -311,14 +311,24 @@ router.patch('/:id', authenticate, ah(async (req, res) => {
     _id: req.params.id,
     token: req.currentUser.token,
   });
+  if (!user) return res.status(404).json({ error: 'No such user' });
+
+  const hasEdit = !!(req?.body?.password || req?.body?.email);
+  if (!hasEdit) return res.status(400).json({ error: 'No modified field.' });
+
+  const query = { $set: {} };
+  // found this solution here: https://stackoverflow.com/a/54734798/2518037
+  Object.keys(req.body)
+    .filter((key) => !['_id', 'password'].includes(key))
+    .forEach((key) => {
+      query.$set[key] = req.body[key];
+    });
+  const updatedUser = await User.findOneAndUpdate({ _id: req.params.id }, query).exec();
   if (req.body.password) {
-    user.password = req.body.password;
+    updatedUser.password = req.body.password;
+    await updatedUser.save();
   }
-  if (req.body.email) {
-    user.email = req.body.email;
-  }
-  await user.save();
-  res.sendStatus(200);
+  return res.status(200).json(updatedUser.toObject()).end();
 }));
 
 module.exports = router;

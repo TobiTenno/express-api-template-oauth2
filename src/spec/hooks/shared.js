@@ -13,9 +13,16 @@ module.exports = {
   signup: async () => chai.request(server)
     .post('/users/signup')
     .send(credentials),
-  login: async () => {
-    const res = await chai.request(server).post('/users/login')
-      .auth(credentials.email, credentials.password);
+  /**
+   * Login
+   * @param {string} [email]
+   * @param {string} [password]
+   * @returns {Promise<{token}>}
+   */
+  login: async ({ email, password } = {}) => {
+    const res = await chai.request(server)
+      .post('/users/login')
+      .auth(email || credentials.email, password || credentials.password);
     return res.body;
   },
   credentials,

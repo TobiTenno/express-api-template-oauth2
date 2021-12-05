@@ -58,3 +58,8 @@ Use the included [`openapi.yaml`](./openapi.yaml) [OAS3](https://swagger.io/docs
 to document your API in a reuseable manner.
 You can even make a documentation to make this easier to read with the open-source automated
 reference documentation tool provided by [redoc](https://github.com/Redocly/redoc).
+
+### Gotchas
+
+Some things I've found developing an api with mongoose:
+- Updating virtual properties that have alternate validations/encodings/encryptions _must_ be done with direct assignment, not through a `Model#findOneAndUpdate` invocation.
