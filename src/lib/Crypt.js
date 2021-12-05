@@ -19,12 +19,16 @@ module.exports = class AESCrypt {
       ENCRYPTION_KEY,
       INITIALIZATION_VECTOR,
     );
-    return `${decipher.update(encrypted, CIPHER_TEXT_ENCODING, PLAIN_ENCODING)}${decipher.final(PLAIN_ENCODING)}`;
+    return `${
+      decipher.update(encrypted, CIPHER_TEXT_ENCODING, PLAIN_ENCODING)
+    }${decipher.final(PLAIN_ENCODING)}`;
   }
 
   static encrypt(cleardata) {
     const encipher = crypto.createCipheriv(CIPHER_ALGORITHM, ENCRYPTION_KEY, INITIALIZATION_VECTOR);
-    lastCrypt = `${encipher.update(cleardata, PLAIN_ENCODING, CIPHER_TEXT_ENCODING)}${encipher.final(CIPHER_TEXT_ENCODING)}`;
+    lastCrypt = `${
+      encipher.update(cleardata, PLAIN_ENCODING, CIPHER_TEXT_ENCODING)
+    }${encipher.final(CIPHER_TEXT_ENCODING)}`;
     return lastCrypt;
   }
 
