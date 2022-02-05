@@ -37,7 +37,7 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.16.5",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-proposal-private-methods": "^7.16.11",
     "@babel/preset-env": "^7.16.11",
