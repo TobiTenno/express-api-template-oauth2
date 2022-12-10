@@ -32,7 +32,7 @@
     "prom-client": "^10.2.3",
     "redoc-express": "^1.0.0",
     "serve-favicon": "^2.5.0",
-    "swagger-stats": "^0.99.2",
+    "swagger-stats": "^0.99.4",
     "winston": "^3.8.2",
     "yaml": "^2.1.3"
   },
