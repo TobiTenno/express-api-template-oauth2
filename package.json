@@ -51,7 +51,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.2.0",
     "mongodb-memory-server": "^8.11.5",
-    "nodemon": "^2.0.20",
+    "nodemon": "^2.0.21",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4"
   },
