@@ -53,7 +53,7 @@
     "mongodb-memory-server": "^8.12.2",
     "nodemon": "^2.0.22",
     "nyc": "^15.1.0",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.8"
   },
   "eslintConfig": {
     "extends": [
