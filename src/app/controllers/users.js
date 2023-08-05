@@ -1,7 +1,7 @@
 'use strict';
 
-const ah = require('express-async-handler');
 const crypto = require('crypto');
+const ah = require('express-async-handler');
 
 const router = require('express').Router();
 

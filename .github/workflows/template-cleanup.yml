@@ -27,9 +27,9 @@ jobs:
           chmod +x .github/template-cleanup/cleanup.sh
           ./.github/template-cleanup/cleanup.sh
       # Generate new OpenAPI
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: .nvmrc
       - name: Install Dependencies
         run: npm install
       - name: Update openapi.yaml

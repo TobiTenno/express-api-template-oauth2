@@ -1,10 +1,10 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const favicon = require('serve-favicon');
-const fs = require('fs');
-const path = require('path');
 const swagger = require('swagger-stats');
 const yaml = require('yaml');
 const RateLimit = require('express-rate-limit');
