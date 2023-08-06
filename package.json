@@ -14,7 +14,7 @@
     "preview:openapi": "npx @redocly/openapi-cli preview-docs openapi.yaml --config .redoclyrc"
   },
   "engines": {
-    "node": ">= 14.14.0"
+    "node": ">= 18.0.0"
   },
   "dependencies": {
     "apicache": "^1.6.3",
