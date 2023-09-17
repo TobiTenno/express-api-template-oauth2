@@ -7,7 +7,7 @@ const cors = require('cors');
 const favicon = require('serve-favicon');
 const swagger = require('swagger-stats');
 const yaml = require('yaml');
-const RateLimit = require('express-rate-limit');
+const { rateLimit } = require('express-rate-limit');
 
 require('./mongoose');
 
@@ -21,7 +21,7 @@ const swaggerOptions = {
 };
 
 // set up rate limiter: maximum of five requests per minute
-const limiter = new RateLimit({
+const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: /* istanbul ignore next */ process.env.NODE_ENV === 'production' ? 100 : 1000000,
 });
