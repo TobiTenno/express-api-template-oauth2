@@ -17,6 +17,18 @@ updates:
     rebase-strategy: "auto"
     ignore:
       - dependency-name: "prom-client"
+     groups:
+       babel:
+         patterns:
+           - '@babel/*'
+           - 'lint-staged'
+        eslint:
+          patterns:
+            - 'eslint*'
+            - prettier
+        express:
+          patterns:
+            - 'express*'
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
