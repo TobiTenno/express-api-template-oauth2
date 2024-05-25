@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: weekly
       day: saturday
-      time: 00:00
+      time: '00:00'
     commit-message:
       prefix: ci
       include: scope
@@ -13,14 +13,14 @@ updates:
       - dependencies
     open-pull-requests-limit: 10
     pull-request-branch-name:
-      separator: "-"
+      separator: '-'
     rebase-strategy: auto
     ignore:
       - dependency-name: prom-client
     groups:
       babel:
         patterns:
-          - "@babel/*"
+          - '@babel/*'
           - lint-staged
       eslint:
         patterns:
@@ -34,7 +34,7 @@ updates:
     schedule:
       interval: weekly
       day: saturday
-      time: 00:00
+      time: '00:00'
     commit-message:
       prefix: ci
     labels:
