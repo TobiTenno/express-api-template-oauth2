@@ -8,7 +8,6 @@ updates:
       time: '00:00'
     commit-message:
       prefix: ci
-      include: scope
     labels:
       - dependencies
     open-pull-requests-limit: 10
