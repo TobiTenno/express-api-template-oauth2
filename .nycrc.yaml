@@ -1,0 +1,10 @@
+exclude:
+  - src/spec/**
+  - src/app/controllers/index.js
+reporter:
+  - lcov
+  - text
+source-map: true
+sourceMap: true
+produce-source-map: true
+skip-full: true

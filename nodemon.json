@@ -1,0 +1,12 @@
+{
+  "env": {
+    "LOG_LEVEL": "debug",
+    "SECRET_KEY": "obCltwRpN3Yn29i7Z8Y1sZwZlIR5MDm9",
+    "INITIALIZATION_VECTOR": "254vi2tCl86fLtUL",
+    "ENABLE_SWAGGER": true,
+    "PORT": 3000
+  },
+  "ignore": [
+    "src/spec/*.js"
+  ]
+}

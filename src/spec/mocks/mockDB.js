@@ -12,10 +12,7 @@ module.exports.connect = async () => {
     version: '4.0.14',
   });
 
-  return mongoose.connect(mongod.getUri(), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  return mongoose.connect(mongod.getUri());
 };
 
 module.exports.close = async () => mongoose.disconnect();
