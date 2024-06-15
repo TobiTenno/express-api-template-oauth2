@@ -1,0 +1,10 @@
+exit: true
+spec: src/spec/**/*.spec.js
+require:
+  - src/spec/hooks/db.js
+enableSourceMaps: true
+enable-source-maps: true
+checkLeaks: true
+normal: 500
+slow: 2000
+fullTrace: true
