@@ -33,7 +33,7 @@
     "serve-favicon": "^2.5.0",
     "swagger-stats": "^0.99.7",
     "winston": "^3.13.1",
-    "yaml": "^2.4.5"
+    "yaml": "^2.5.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.24.8",
