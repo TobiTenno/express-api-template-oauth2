@@ -32,7 +32,7 @@
     "redoc-express": "^2.1.0",
     "serve-favicon": "^2.5.0",
     "swagger-stats": "^0.99.7",
-    "winston": "^3.15.0",
+    "winston": "^3.16.0",
     "yaml": "^2.6.0"
   },
   "devDependencies": {
