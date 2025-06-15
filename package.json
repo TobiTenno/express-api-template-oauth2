@@ -26,7 +26,7 @@
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "express-rate-limit": "^7.5.0",
-    "mongoose": "^8.15.1",
+    "mongoose": "^8.15.2",
     "mongoose-unique-validator": "^5.0.1",
     "prom-client": "^10.2.3",
     "redoc-express": "^2.1.0",
