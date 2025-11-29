@@ -147,6 +147,8 @@ describe('/users', () => {
         .send(null);
       should.exist(res);
       res.should.have.status(400);
+      res.body.should.have.property('error');
+      res.body.error.should.eq('Bad Request. No `credentials`.');
     });
   });
   describe('/logout DELETE', () => {

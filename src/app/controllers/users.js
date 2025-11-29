@@ -165,7 +165,7 @@ router.get('/:id', authenticate, ah(async (req, res) => {
  *          description: Invalid username/password supplied
  */
 router.post('/signup', ah(async (req, res) => {
-  const credentials = req.body.credentials || req.body;
+  const credentials = req.body?.credentials ?? req.body;
   if (!credentials || !credentials.email || !credentials.password) {
     return res.status(400).json({ error: 'Bad Request. No `credentials`.' });
   }
