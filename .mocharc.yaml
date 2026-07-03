@@ -1,10 +1,9 @@
 exit: true
-spec: src/spec/**/*.spec.js
-require:
-  - src/spec/hooks/db.js
-enableSourceMaps: true
-enable-source-maps: true
-checkLeaks: true
-normal: 500
+spec: test/**/*.spec.ts
+timeout: 60000
 slow: 2000
 fullTrace: true
+require:
+  - test/hooks.ts
+node-option:
+  - import=tsx

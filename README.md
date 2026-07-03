@@ -1,65 +1,80 @@
 # express-api-template-oauth2
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+Express API template on NestJS + TypeScript. Nest runs on Express under the hood —
+structured modules, DI, and TypeScript without leaving the Express ecosystem.
+
+Includes bearer-token auth, Mongoose models, rate limiting, OpenAPI docs, and
+common middleware.
 
 ## Dependencies
 
 Install with `npm install`.
 
--   [`express`](http://expressjs.com/)
--   [`mongoose`](http://mongoosejs.com/)
-
-To update the versions in [`package.json`](package.json),
-run `npm update --save && npm update --save-dev`.
-You may wish to test these changes by deleting the `node_modules` directory,
-running `npm install`, and `npm test`.
-Fix any conflicts.
+- [`express`](https://expressjs.com/) (via `@nestjs/platform-express`)
+- [`@nestjs/core`](https://nestjs.com/)
+- [`mongoose`](http://mongoosejs.com/)
 
 ## Installation
 
-1.  Click the "Use this template" button on the root page of the repository
-1.  Replace all instances of `'express-template'` with your app name. This
-    includes `package.json`, various debugger configurations, and the MongoDB
-    store.
-1.  Install dependencies with `npm install`.
-1.  Set a SECRET_KEY in the environment (`.env` file or process manager of your choice).
-1.  Run the API server with `npm start`. If you want your code to be reloaded on
-    change, you should use `npm run dev` instead of
-    `npm start`.
+1. Click the "Use this template" button on the root page of the repository
+1. Replace all instances of `express-template` / `express-api-template-oauth2` with
+   your app name. This includes `package.json`, debugger configs, and the MongoDB
+   store name.
+1. Install dependencies with `npm install`.
+1. Set `SECRET_KEY` and `INITIALIZATION_VECTOR` in the environment (`.env` file or
+   process manager of your choice).
+1. Run the API server with `npm start`. For reload on change, use `npm run dev`.
 
-For development and testing, set the SECRET_KEY from the root of your
- repository using
+For development and testing, set secrets from the repository root:
 
 ```sh
-echo SECRET_KEY=$(/usr/local/opt/openssl/bin/openssl rand -base64 66 | tr -d '\n') >>.env
+echo SECRET_KEY=$(openssl rand -base64 32 | tr -d '\n' | head -c 32) >>.env
+echo INITIALIZATION_VECTOR=$(openssl rand -base64 16 | tr -d '\n' | head -c 16) >>.env
 ```
 
+`SECRET_KEY` must be 32 bytes and `INITIALIZATION_VECTOR` must be 16 bytes (AES-256-CBC).
 
 ## Structure
 
-Dependencies are stored in [`package.json`](package.json).
+Layered layout — controllers, services, and modules live in separate folders:
 
-Developers should store JavaScript files in [`src/app/controllers`](src/app/controllers)
- and [`src/app/models`](src/app/models).
+```
+src/
+  main.ts
+  controllers/            # HTTP layer (Express routes via Nest)
+  services/               # business logic
+  modules/                # Nest module wiring (incl. app.module)
+  dto/
+  schemas/
+  common/                 # filters, guards, decorators, utils
+  types/
+test/                     # Mocha + Chai specs
+```
 
-Routes should follow express patterns for using index.js files in folders, such as `app.use('/examples', require('./examples'))` from [`src/app/controllers/index.js`](src/app/controllers/index.js)
+ESM TypeScript (`"type": "module"`) with extensionless relative imports
+(`./modules/app.module`, not `./modules/app.module.js`). Runtime resolves them via
+[`extensionless`](https://www.npmjs.com/package/extensionless).
 
 ## Tasks
 
-Developers should run these often!
-
--   `npm run test`: Tests your code
--   `npm run lint:fix`: Fixes any auto-fixable issues
+- `npm run test` — run Mocha specs
+- `npm run lint:fix` — auto-fix lint issues
+- `npm run build` — compile TypeScript
+- `npm run start:dev` / `npm run dev` — watch mode
 
 ## API
 
-Use the included [`openapi.yaml`](./openapi.yaml) [OAS3](https://swagger.io/docs/specification/about/) specification file
-to document your API in a reuseable manner.
-You can even make a documentation to make this easier to read with the open-source automated
-reference documentation tool provided by [redoc](https://github.com/Redocly/redoc).
+OpenAPI spec lives in [`openapi.yaml`](./openapi.yaml). Browse docs at `/docs` when
+the server is running. Swagger UI is also available at `/meta/swagger`.
+
+### Auth
+
+- **Signup** `POST /users/signup` with `{ email, password }` or `{ credentials: { email, password } }`
+- **Login** `POST /users/login` with HTTP Basic (`email:password`)
+- **Bearer** subsequent requests use `Authorization: Bearer <token>` from login
 
 ### Gotchas
 
-Some things I've found developing an api with mongoose:
-- Updating virtual properties that have alternate validations/encodings/encryptions _must_ be done with direct assignment, not through a `Model#findOneAndUpdate` invocation.
+Updating virtual properties that have alternate validations/encodings/encryptions
+(e.g. `password`) must use direct assignment and `save()`, not only
+`findOneAndUpdate`.

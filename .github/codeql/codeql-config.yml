@@ -1,5 +1,6 @@
 paths:
   - src
 paths-ignore:
-  - '**/*.spec.js'
-  - 'src/spec/**/*'
+  - '**/*.spec.ts'
+  - '**/*.e2e-spec.ts'
+  - 'test/**/*'

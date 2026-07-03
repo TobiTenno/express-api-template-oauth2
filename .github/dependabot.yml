@@ -17,17 +17,9 @@ updates:
     ignore:
       - dependency-name: prom-client
     groups:
-      babel:
+      default:
         patterns:
-          - '@babel/*'
-          - lint-staged
-      eslint:
-        patterns:
-          - eslint*
-          - prettier
-      express:
-        patterns:
-          - express*
+          - '*'
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -42,3 +34,7 @@ updates:
     pull-request-branch-name:
       separator: "-"
     rebase-strategy: auto
+    groups:
+      default:
+        patterns:
+          - '*'

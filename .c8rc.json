@@ -1,0 +1,8 @@
+{
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/types/**", "src/main.ts"],
+  "reporter": ["lcov", "text"],
+  "all": true,
+  "skip-full": true,
+  "extension": [".ts"]
+}

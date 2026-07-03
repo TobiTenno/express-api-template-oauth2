@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7.0.0
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v6
       with:
         node-version-file: .nvmrc
@@ -32,7 +32,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        node-version: ['lts/gallium', 'lts/hydrogen', '20']
+        node-version: ['20', '22', '24']
     steps:
       - uses: actions/checkout@v7.0.0
       - name: Use Node.js ${{ matrix.node-version }}
@@ -51,10 +51,10 @@ jobs:
       - run: npm test
         env:
           CI: true
-          parallel: true
-          SECRET_KEY: F5382A73E29CB53C6E817C2F89F95
+          SECRET_KEY: obCltwRpN3Yn29i7Z8Y1sZwZlIR5MDm9
+          INITIALIZATION_VECTOR: 254vi2tCl86fLtUL
           NODE_ENV: development
-          ENABLE_SWAGGER: false
+          ENABLE_SWAGGER: 'false'
           LOG_LEVEL: error
   coverage:
     name: Coverage
@@ -66,9 +66,13 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm install
-      - run: npm test
+      - run: npm run test:cov
         env:
           CI: true
+          SECRET_KEY: obCltwRpN3Yn29i7Z8Y1sZwZlIR5MDm9
+          INITIALIZATION_VECTOR: 254vi2tCl86fLtUL
+          NODE_ENV: development
+          LOG_LEVEL: error
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
