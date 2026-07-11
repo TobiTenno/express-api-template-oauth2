@@ -19,11 +19,11 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.6",
+    "@nestjs/common": "^11.1.28",
     "@nestjs/config": "^4.0.2",
-    "@nestjs/core": "^11.1.6",
+    "@nestjs/core": "^11.1.28",
     "@nestjs/mongoose": "^11.0.3",
-    "@nestjs/platform-express": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.28",
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/throttler": "^6.4.0",
     "bcrypt": "^6.0.0",
@@ -40,15 +40,15 @@
     "yaml": "^2.9.0"
   },
   "devDependencies": {
-    "@nestjs/cli": "^11.0.10",
+    "@nestjs/cli": "^11.0.24",
     "@nestjs/schematics": "^11.0.7",
-    "@nestjs/testing": "^11.1.6",
+    "@nestjs/testing": "^11.1.28",
     "@stylistic/eslint-plugin": "^5.2.3",
     "@types/bcrypt": "^6.0.0",
     "@types/chai": "^5.2.2",
     "@types/express": "^5.0.3",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^26.1.0",
+    "@types/node": "^26.1.1",
     "@types/serve-favicon": "^2.5.7",
     "@types/supertest": "^7.2.0",
     "c8": "^11.0.0",
@@ -58,7 +58,7 @@
     "mongodb-memory-server": "^11.2.0",
     "supertest": "^7.1.4",
     "tsx": "^4.20.5",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.44.0"
+    "typescript": "^7.0.2",
+    "typescript-eslint": "^8.63.0"
   }
 }
