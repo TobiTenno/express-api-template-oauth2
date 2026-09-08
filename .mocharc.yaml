@@ -4,6 +4,7 @@ timeout: 60000
 slow: 2000
 fullTrace: true
 require:
+  - test/mongoose-tsx-patch.ts
   - test/hooks.ts
 node-option:
   - import=tsx
